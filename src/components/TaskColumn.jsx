@@ -1,8 +1,9 @@
 import React from 'react'
 import './TaskColumn.css'
 import TaskCard from './TaskCard'
+import DropArea from './DropArea'
 
-const TaskColumn = ({heading_name,icon,tasks,status,handleDelete}) => {
+const TaskColumn = ({heading_name,icon,tasks,status,handleDelete,setActiveCard,onDrop}) => {
     
   return (
     <section className='task_colum'>
@@ -11,14 +12,21 @@ const TaskColumn = ({heading_name,icon,tasks,status,handleDelete}) => {
             <img className='task_colum_icon' src={icon} alt='todo'/>{heading_name}
         </h2>
       </div>
-        {tasks.map((task ,index)=> task.status===status && 
+      <DropArea onDrop={()=> onDrop(status, 0)}/>
+        {tasks.map((task ,index)=> task.status===status && (
+          <React.Fragment key={index} >
         <TaskCard 
-        key={index} 
+        
         title={task.task} 
         tags={task.tags}
         handleDelete={handleDelete}
         index={index}
-        />)}
+        setActiveCard={setActiveCard}
+        />
+        <DropArea onDrop={()=> onDrop(status,index+1)}/>
+        </React.Fragment>
+        )
+        )}
     </section>
     
   )
